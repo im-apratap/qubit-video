@@ -1,0 +1,608 @@
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .str-video__call-controls {
+    gap: 8px !important;
+  }
+  
+  .str-video__call-controls__button {
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 8px !important;
+  }
+  
+  .str-video__speaker-layout__participants-bar {
+    flex-direction: row !important;
+    height: auto !important;
+    max-height: 120px !important;
+  }
+
+  .theme-toggle {
+    top: 8px;
+    left: 8px;
+    padding: 6px;
+  }
+
+  .theme-toggle button {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Stream theme variables with theme support */
+.str-video__theme {
+  --str-video-primary-color: var(--accent-color);
+  --str-video-secondary-color: var(--text-muted);
+  --str-video-background-color: var(--bg-primary);
+  --str-video-text-color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+/* Theme transition animation for all elements */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Light theme specific adjustments */
+[data-theme="light"] .str-video__participant-view {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .str-video__call-controls__button {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .loading-card,
+[data-theme="light"] .error-card,
+[data-theme="light"] .video-controls,
+[data-theme="light"] .video-size-indicator {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Dark theme specific glows and effects */
+[data-theme="dark"] .str-video__participant-view {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.1) !important;
+}
+
+[data-theme="dark"] .loading-card,
+[data-theme="dark"] .error-card {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}/* CallPage.css - Custom styles with Stream SDK overrides */
+
+/* Theme Variables */
+:root {
+  /* Dark Theme (Default) */
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-tertiary: #374151;
+  --text-primary: #ffffff;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --error-color: #ef4444;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  
+  /* Gradient backgrounds */
+  --gradient-primary: linear-gradient(135deg, #1f2937, #111827, #1f2937);
+  --gradient-secondary: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
+  --gradient-loading: linear-gradient(135deg, #1e3a8a, #7c3aed, #3730a3);
+  --gradient-error: linear-gradient(135deg, #7f1d1d, #374151, #111827);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #e2e8f0;
+  --text-primary: #1f2937;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --error-color: #dc2626;
+  --success-color: #059669;
+  --warning-color: #d97706;
+  
+  /* Light gradient backgrounds */
+  --gradient-primary: linear-gradient(135deg, #f8fafc, #ffffff, #f1f5f9);
+  --gradient-secondary: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+  --gradient-loading: linear-gradient(135deg, #dbeafe, #e0e7ff, #c7d2fe);
+  --gradient-error: linear-gradient(135deg, #fecaca, #fee2e2, #fef2f2);
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes progressBar {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes themeTransition {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* Animation classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animate-progress-bar {
+  animation: progressBar 3s ease-in-out infinite;
+}
+
+.animate-theme-transition {
+  animation: themeTransition 0.3s ease-in-out;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 4px;
+  left: 4px;
+  z-index: 60;
+  background: var(--gradient-secondary);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle button:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+.theme-toggle button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--accent-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.theme-toggle button:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+/* Sun and Moon icons animation */
+.theme-icon {
+  transition: all 0.3s ease;
+}
+
+.theme-icon.sun {
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-icon.moon {
+  transform: rotate(180deg) scale(1);
+}
+
+[data-theme="light"] .theme-icon.sun {
+  transform: rotate(180deg) scale(1.1);
+}
+
+[data-theme="light"] .theme-icon.moon {
+  transform: rotate(0deg) scale(0.8);
+  opacity: 0;
+}
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-track {
+  background: #374151;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #3b82f6;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: #2563eb;
+  transform: scale(1.1);
+}
+
+.slider::-moz-range-track {
+  background: #374151;
+  height: 8px;
+  border-radius: 4px;
+  border: none;
+}
+
+.slider::-moz-range-thumb {
+  background: #3b82f6;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Stream SDK Overrides - Force video to be larger with theme support */
+.str-video__call-container {
+  height: 100% !important;
+  width: 100% !important;
+  background: var(--bg-primary) !important;
+}
+
+.str-video__speaker-layout {
+  height: 100% !important;
+  width: 100% !important;
+  background: var(--bg-primary) !important;
+}
+
+.str-video__speaker-layout__wrapper {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.str-video__participant-view {
+  height: 100% !important;
+  width: 100% !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  border: 2px solid var(--border-color) !important;
+}
+
+.str-video__participant-view__video-wrapper {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.str-video__participant-view__video {
+  height: 100% !important;
+  width: 100% !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+}
+
+/* Override Stream's default video sizing */
+.str-video__speaker-layout__participant-bar {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.str-video__speaker-layout__participant-bar > div {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Force main video participant to take full space */
+.str-video__speaker-layout__speaker-container {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.str-video__speaker-layout__speaker-container .str-video__participant-view {
+  height: 100% !important;
+  width: 100% !important;
+  min-height: 100% !important;
+  min-width: 100% !important;
+}
+
+/* Override any max-width/max-height constraints */
+.str-video__speaker-layout__speaker-container * {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* Participant name overlay styling with theme support */
+.str-video__participant-view__bar {
+  background: var(--gradient-secondary) !important;
+  backdrop-filter: blur(8px) !important;
+  border-radius: 8px !important;
+  margin: 8px !important;
+  padding: 8px 12px !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.str-video__participant-view__bar .str-video__participant-details__name {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Call controls styling with theme support */
+.str-video__call-controls {
+  background: transparent !important;
+  padding: 0 !important;
+  gap: 12px !important;
+}
+
+.str-video__call-controls__button {
+  background: var(--bg-tertiary) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+}
+
+.str-video__call-controls__button:hover {
+  background: var(--accent-color) !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.str-video__call-controls__button--active {
+  background: var(--error-color) !important;
+  color: white !important;
+}
+
+.str-video__call-controls__button--active:hover {
+  background: var(--error-color) !important;
+  opacity: 0.8 !important;
+}
+
+/* Mute/unmute specific styles */
+.str-video__call-controls__button[data-testid*="mute"] {
+  background: var(--success-color) !important;
+  color: white !important;
+}
+
+.str-video__call-controls__button[data-testid*="mute"]:hover {
+  background: var(--success-color) !important;
+  opacity: 0.8 !important;
+}
+
+.str-video__call-controls__button[data-testid*="mute"].str-video__call-controls__button--active {
+  background: var(--error-color) !important;
+}
+
+/* Screen share button */
+.str-video__call-controls__button[data-testid*="screen"] {
+  background: var(--accent-color) !important;
+  color: white !important;
+}
+
+.str-video__call-controls__button[data-testid*="screen"]:hover {
+  background: var(--accent-hover) !important;
+}
+
+/* Leave call button */
+.str-video__call-controls__button[data-testid*="leave"] {
+  background: var(--error-color) !important;
+  color: white !important;
+}
+
+.str-video__call-controls__button[data-testid*="leave"]:hover {
+  background: var(--error-color) !important;
+  opacity: 0.8 !important;
+}
+
+/* Participants sidebar */
+.str-video__speaker-layout__participants-bar {
+  gap: 8px !important;
+  padding: 8px !important;
+  background: var(--bg-secondary) !important;
+}
+
+.str-video__speaker-layout__participants-bar .str-video__participant-view {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  border: 2px solid var(--border-color) !important;
+  transition: all 0.3s ease !important;
+}
+
+.str-video__speaker-layout__participants-bar .str-video__participant-view:hover {
+  border-color: var(--accent-color) !important;
+  transform: scale(1.02) !important;
+}
+
+/* Loading spinner override */
+.str-video__loading {
+  color: var(--accent-color) !important;
+}
+
+/* Custom scrollbar for any overflow areas with theme support */
+.str-video__speaker-layout::-webkit-scrollbar {
+  width: 6px;
+}
+
+.str-video__speaker-layout::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.str-video__speaker-layout::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 3px;
+}
+
+.str-video__speaker-layout::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Ensure video container takes full available space */
+.video-container {
+  height: 100% !important;
+  width: 100% !important;
+  position: relative;
+  background: var(--bg-primary);
+  transition: all 0.3s ease;
+}
+
+.video-container > * {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Force aspect ratio to be maintained */
+.str-video__participant-view__video-wrapper video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Remove any default margins/paddings that might shrink the video */
+.str-video__theme * {
+  box-sizing: border-box !important;
+}
+
+/* Theme-aware main container backgrounds */
+.call-page-container {
+  height: 100vh !important;
+  overflow: hidden;
+  background: var(--gradient-primary) !important;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.call-video-wrapper {
+  height: 100% !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: var(--bg-primary) !important;
+}
+
+.call-video-main {
+  flex: 1 !important;
+  min-height: 0 !important;
+  position: relative !important;
+}
+
+.call-video-main > * {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Loading screen theme support */
+.loading-container {
+  background: var(--gradient-loading) !important;
+  color: var(--text-primary);
+}
+
+.loading-card {
+  background: var(--gradient-secondary) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.loading-spinner {
+  color: var(--accent-color);
+}
+
+.loading-dots div {
+  background-color: var(--accent-color);
+}
+
+/* Error screen theme support */
+.error-container {
+  background: var(--gradient-error) !important;
+  color: var(--text-primary);
+}
+
+.error-card {
+  background: var(--gradient-secondary) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--error-color);
+  color: var(--text-primary);
+}
+
+/* Video size controls theme support */
+.video-controls {
+  background: var(--gradient-secondary) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.video-size-indicator {
+  background: var(--gradient-secondary) !important;
+  backdrop-filter: blur(8px);
+  color: var(--text-primary);
+}

@@ -1,7 +1,11 @@
 export const protectRoute = (req, res, next) => {
-    if(req.auth().isAuthenticated){
-        return res.status(401).json({message: "Unauthorized - You must be logged-in"})
-    }
+  const auth = req.auth?.(); // Clerk requires calling it
 
-    next()
-}
+  if (!auth || !auth.userId) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized - You must be logged in" });
+  }
+
+  next();
+};

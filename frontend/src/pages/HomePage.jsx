@@ -1,7 +1,7 @@
 import { UserButton } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { useStreamChat } from "../hooks/useStreamChat";
+import { useStreamChat } from "../hooks/useStreamChat.js";
 import PageLoader from "../components/PageLoader";
 
 import {
@@ -43,7 +43,6 @@ const HomePage = () => {
   if (error) return (
     <>
       <p>Something went wrong...</p>
-      {console.log(error)}
     </>
   )
   if (isLoading || !chatClient) return <PageLoader />;
@@ -59,7 +58,7 @@ const HomePage = () => {
               <div className="team-channel-list__header gap-4">
                 <div className="brand-container">
                   <img src="/logo.jpg" alt="Logo" className="brand-logo" />
-                  <span className="brand-name">Video Conferencing</span>
+                  <span className="brand-name">Video </span>
                 </div>
                 <div className="user-button-wrapper">
                   <UserButton />

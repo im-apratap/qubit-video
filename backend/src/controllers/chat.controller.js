@@ -1,12 +1,19 @@
-import { generateStreamToken } from "../config/stream.js"
+import { generateStreamToken } from "../config/stream.js";
 
-export const getStreamToken = async(req,res)=>{
-    try{
-        const token = generateStreamToken(req.auth().userId )
+export const getStreamToken = async (req, res) => {
+  try {
+    // Call req.auth() to get the auth object
+    const auth = req.auth?.();
+    const userId = auth?.userId;
 
-        res.status(200).json({token})
-    }catch(error){
-        console.log(`Error generating Stream Token ${error}`);        
-        res.status(500).json({message: "Error generating Stream token"})
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized - no userId" });
     }
-}
+
+    const token = generateStreamToken(userId);
+    res.json({ token });
+  } catch (error) {
+    console.error("Error generating Stream token:", error);
+    res.status(500).json({ error: "Failed to generate Stream token" });
+  }
+};
