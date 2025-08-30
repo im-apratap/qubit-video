@@ -58,7 +58,7 @@ const HomePage = () => {
               <div className="team-channel-list__header gap-4">
                 <div className="brand-container">
                   <img src="/logo.jpg" alt="Logo" className="brand-logo" />
-                  <span className="brand-name">Video </span>
+                  <span className="brand-name">QUBIT</span>
                 </div>
                 <div className="user-button-wrapper">
                   <UserButton />
