@@ -8,7 +8,7 @@ const AuthPage = () => {
         <div className="auth-hero">
           <div className="brand-container">
             <img
-              src="/logo.jpg"
+              src="/qubit_logo.svg"
               alt="Video-conferencing"
               className="brand-logo"
             />
