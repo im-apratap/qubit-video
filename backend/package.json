@@ -19,6 +19,8 @@
     "express": "^5.1.0",
     "inngest": "^3.40.1",
     "mongoose": "^8.16.5",
+    "multer": "^2.0.2",
+    "openai": "^5.20.1",
     "stream-chat": "^9.18.1"
   },
   "devDependencies": {
