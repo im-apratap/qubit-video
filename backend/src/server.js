@@ -6,7 +6,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { functions, inngest } from "./config/inngest.js";
 import { serve } from "inngest/express";
 import chatRoutes from "./routes/chat.route.js";
-import translationRoutes from "./routes/translation.js";
+import translationRoutes from "./routes/translation.js";un dev
 
 import cors from "cors";
 

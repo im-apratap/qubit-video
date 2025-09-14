@@ -1,11 +1,5 @@
 import axios from "axios";
 
-// this was the first version
-// const BASE_URL =
-//   import.meta.env.MODE === "development"
-//     ? "http://localhost:8000/api"
-//     : "https://video-conferencing-backend.vercel.app/api";
-
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const axiosInstance = axios.create({
