@@ -30,8 +30,6 @@ import { useStreamChat } from "../hooks/useStreamChat.js";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import "stream-chat-react/dist/css/v2/index.css";
-// If you use a custom theme like in HomePage, you can also import it:
-// import "../styles/stream-chat-theme.css";
 
 const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
 
@@ -220,7 +218,7 @@ const CallContent = () => {
   const callingState = useCallCallingState();
   const navigate = useNavigate();
 
-  // Handle the "LEFT" calling state
+  // If the User leaves the call 
   if (callingState === CallingState.LEFT) {
     // Attempt to close the tab
     const tabClosed = window.close();
