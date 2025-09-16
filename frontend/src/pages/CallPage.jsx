@@ -25,7 +25,7 @@ import {
   Window,
 } from "stream-chat-react";
 
-import { MessageCircleIcon, XIcon } from "lucide-react";
+import { MessageCircleIcon, XIcon, Languages } from "lucide-react";
 import { useStreamChat } from "../hooks/useStreamChat.js";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
@@ -165,7 +165,7 @@ const CallPage = () => {
       {/* Chat toggle button */}
       <button
         onClick={() => setIsChatOpen((v) => !v)}
-        className="absolute top-4 right-4 p-3 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition"
+        className="absolute top-4 right-4 flex items-center gap-2 px-4 py-3 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition font-medium text-sm"
         aria-label={isChatOpen ? "Close chat" : "Open chat"}
       >
         {isChatOpen ? (
@@ -173,6 +173,16 @@ const CallPage = () => {
         ) : (
           <MessageCircleIcon className="size-5" />
         )}
+        <span>Chat</span>
+      </button>
+
+      <button
+        onClick={() => toast.success("Language selector coming soon!")}
+        className="absolute top-4 left-4 p-3 rounded-full bg-white text-gray-600 shadow-md hover:bg-gray-100 transition flex items-center justify-center"
+        aria-label="Change language"
+      >
+        <Languages className="size-5" />
+        <span>Translate</span>
       </button>
 
       {/* Chat Drawer */}
