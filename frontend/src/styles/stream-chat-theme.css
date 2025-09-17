@@ -65,8 +65,7 @@
 }
 
 .chat-container {
-  height: calc(100vh - 2rem);
-    border-radius: 1rem;
+  display: flex;
 }
 
 /* Layout */
@@ -76,6 +75,7 @@
 
 /* Channel List Sidebar */
 .str-chat__channel-list {
+  flex: 0 0 25%;
   height: 100%;
   backdrop-filter: blur(25px);
   border: none !important;
@@ -750,7 +750,7 @@
 }
 
 .chat-main {
-  flex: 1;
+  flex: 1 1 75%;
   background: rgba(240, 253, 250, 0.98); /* Light base for readability */
   border-radius: 0 2rem 2rem 0;
   overflow: hidden;
