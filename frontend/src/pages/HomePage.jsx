@@ -1,5 +1,5 @@
 import { UserButton } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { useStreamChat } from "../hooks/useStreamChat.js";
 import PageLoader from "../components/PageLoader";
@@ -28,6 +28,11 @@ const HomePage = () => {
 
   const { chatClient, error, isLoading } = useStreamChat();
 
+  const filters = useMemo(() => ({ 
+    members: { $in: [chatClient?.user?.id] },
+    type: 'messaging'
+  }), [chatClient?.user?.id]);
+
   // set active channel from URL params
   useEffect(() => {
     if (chatClient) {
@@ -45,12 +50,12 @@ const HomePage = () => {
       <p>Something went wrong...</p>
     </>
   )
-  if (isLoading || !chatClient) return <PageLoader />;
+  if (isLoading || !chatClient || !chatClient.user) return <PageLoader />;
 
   return (
-    <div className="chat-wrapper">
+    <div className="chat-wrapper h-screen overflow-hidden flex flex-col">
       <Chat client={chatClient}>
-        <div className="chat-container">
+        <div className="chat-container flex-1 h-full overflow-hidden">
           {/* LEFT SIDEBAR */}
           <div className="str-chat__channel-list">
             <div className="team-channel-list">
@@ -77,9 +82,10 @@ const HomePage = () => {
                 </div>
 
                 {/* CHANNEL LIST */}
-                <ChannelList
-                  filters={{ members: { $in: [chatClient?.user?.id] } }}
-                  options={{ state: true, watch: true }}
+                {chatClient?.user && (
+                  <ChannelList
+                    filters={filters}
+                    options={{ state: true, watch: true }}
                   Preview={({ channel }) => (
                     <CustomChannelPreview
                       channel={channel}
@@ -98,7 +104,6 @@ const HomePage = () => {
                         </div>
                       </div>
 
-                      {/* todos: add better components here instead of just a simple text  */}
                       {loading && (
                         <div className="loading-message">
                           Loading channels...
@@ -111,17 +116,17 @@ const HomePage = () => {
                       )}
 
                       <div className="channels-list">{children}</div>
-
-                      <div className="section-header direct-messages">
-                        <div className="section-title">
-                          <UsersIcon className="size-4" />
-                          <span>Direct Messages</span>
-                        </div>
-                      </div>
-                      <UsersList activeChannel={activeChannel} />
                     </div>
                   )}
                 />
+                )}
+                <div className="section-header direct-messages">
+                  <div className="section-title">
+                    <UsersIcon className="size-4" />
+                    <span>Direct Messages</span>
+                  </div>
+                </div>
+                <UsersList activeChannel={activeChannel} />
               </div>
             </div>
           </div>

@@ -28,7 +28,7 @@ export const useStreamChat = () => {
   useEffect(() => {
     if (!tokenData?.token || !user?.id || !STREAM_API_KEY) return;
 
-    const client = StreamChat.getInstance(STREAM_API_KEY);
+    const client = new StreamChat(STREAM_API_KEY);
     let cancelled = false;
 
     const connect = async () => {

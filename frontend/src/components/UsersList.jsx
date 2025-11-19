@@ -16,7 +16,7 @@ const UsersList = ({ activeChannel }) => {
     const response = await client.queryUsers(
       { id: { $ne: client.user.id } },
       { name: 1 },
-      { limit: 20 }
+      { limit: 50 }
     );
 
     const usersOnly = response.users.filter((user) => !user.id.startsWith("recording-"));
