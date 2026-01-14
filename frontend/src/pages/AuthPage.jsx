@@ -5,7 +5,7 @@ const AuthPage = () => {
   return (
     <div className="auth-container">
       <div className="auth-left">
-        <div className="auth-hero">
+        <div className="auth-hero pt-serif-regular">
           <div className="brand-container">
             <img
               src="/qubit_logo.svg"
@@ -18,12 +18,6 @@ const AuthPage = () => {
           <h1 className="hero-title">
             Your one-stop solution for smarter, seamless online classes ✨
           </h1>
-
-          <p className="hero-subtitle">
-            Stay connected with your classmates through secure, real-time
-            messaging. Collaborate effortlessly, share ideas, and enhance your
-            online learning experience with tools built for students.
-          </p>
 
           <div className="features-list">
             <SignInButton mode="modal">

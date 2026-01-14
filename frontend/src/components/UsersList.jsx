@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useSearchParams } from "react-router";
 import { useChatContext } from "stream-chat-react";
@@ -10,30 +10,42 @@ const UsersList = ({ activeChannel }) => {
   const { client } = useChatContext();
   const [_, setSearchParams] = useSearchParams();
 
-  const fetchUsers = useCallback(async () => {
-    if (!client?.user) return;
+  const fetchUsers = useCallback(
+    async ({ pageParam = 0 }) => {
+      if (!client?.user) return [];
 
-    const response = await client.queryUsers(
-      { id: { $ne: client.user.id } },
-      { name: 1 },
-      { limit: 50 }
-    );
+      const response = await client.queryUsers(
+        { id: { $ne: client.user.id } },
+        { name: 1 },
+        { limit: 50, offset: pageParam }
+      );
 
-    const usersOnly = response.users.filter((user) => !user.id.startsWith("recording-"));
-
-    return usersOnly;
-  }, [client]);
+      return response.users.filter((user) => !user.id.startsWith("recording-"));
+    },
+    [client]
+  );
 
   const {
-    data: users = [],
+    data,
     isLoading,
     isError,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["users-list", client?.user?.id],
     queryFn: fetchUsers,
+    getNextPageParam: (lastPage, allPages) => {
+      // If we got fewer than 50 users (even after filter, though ideally we check raw),
+      // we assume we reached the end.
+      return lastPage.length < 50 ? undefined : allPages.length * 50;
+    },
+    initialPageParam: 0,
     enabled: !!client?.user,
     staleTime: 1000 * 60 * 5, // 5 mins
   });
+
+  const users = data?.pages.flat() || [];
 
   // staleTime
   // what it does: tells React Query the data is "fresh" for 5 minutes
@@ -44,32 +56,45 @@ const UsersList = ({ activeChannel }) => {
 
     try {
       //  bc stream does not allow channelId to be longer than 64 chars
-      const channelId = [client.user.id, targetUser.id].sort().join("-").slice(0, 64);
+      const channelId = [client.user.id, targetUser.id]
+        .sort()
+        .join("-")
+        .slice(0, 64);
       const channel = client.channel("messaging", channelId, {
         members: [client.user.id, targetUser.id],
       });
       await channel.watch();
       setSearchParams({ channel: channel.id });
     } catch (error) {
-      console.log("Error creating DM", error),
-        Sentry.captureException(error, {
-          tags: { component: "UsersList" },
-          extra: {
-            context: "create_direct_message",
-            targetUserId: targetUser?.id,
-          },
-        });
+      console.log("Error creating DM", error);
+      Sentry.captureException(error, {
+        tags: { component: "UsersList" },
+        extra: {
+          context: "create_direct_message",
+          targetUserId: targetUser?.id,
+        },
+      });
     }
   };
 
-  if (isLoading) return <div className="team-channel-list__message">Loading users...</div>;
-  if (isError) return <div className="team-channel-list__message">Failed to load users</div>;
-  if (!users.length) return <div className="team-channel-list__message">No other users found</div>;
+  if (isLoading)
+    return <div className="team-channel-list__message">Loading users...</div>;
+  if (isError)
+    return (
+      <div className="team-channel-list__message">Failed to load users</div>
+    );
+  if (!users.length)
+    return (
+      <div className="team-channel-list__message">No other users found</div>
+    );
 
   return (
     <div className="team-channel-list__users">
       {users.map((user) => {
-        const channelId = [client.user.id, user.id].sort().join("-").slice(0, 64);
+        const channelId = [client.user.id, user.id]
+          .sort()
+          .join("-")
+          .slice(0, 64);
         const channel = client.channel("messaging", channelId, {
           members: [client.user.id, user.id],
         });
@@ -81,7 +106,8 @@ const UsersList = ({ activeChannel }) => {
             key={user.id}
             onClick={() => startDirectMessage(user)}
             className={`str-chat__channel-preview-messenger  ${
-              isActive && "!bg-black/20 !hover:bg-black/20 border-l-8 border-purple-500 shadow-lg0"
+              isActive &&
+              "!bg-black/20 !hover:bg-black/20 border-l-8 border-purple-500 shadow-lg0"
             }`}
           >
             <div className="flex items-center gap-2 w-full">
@@ -102,7 +128,9 @@ const UsersList = ({ activeChannel }) => {
 
                 <CircleIcon
                   className={`w-2 h-2 absolute -bottom-0.5 -right-0.5 ${
-                    user.online ? "text-green-500 fill-green-500" : "text-gray-400 fill-gray-400"
+                    user.online
+                      ? "text-green-500 fill-green-500"
+                      : "text-gray-400 fill-gray-400"
                   }`}
                 />
               </div>
@@ -120,6 +148,15 @@ const UsersList = ({ activeChannel }) => {
           </button>
         );
       })}
+      {hasNextPage && (
+        <button
+          onClick={() => fetchNextPage()}
+          disabled={isFetchingNextPage}
+          className="w-full py-2 mt-4 text-sm font-medium text-cyan-100 bg-white/5 rounded-lg hover:bg-white/10 transition-colors disabled:opacity-50"
+        >
+          {isFetchingNextPage ? "Loading more..." : "Load More"}
+        </button>
+      )}
     </div>
   );
 };
