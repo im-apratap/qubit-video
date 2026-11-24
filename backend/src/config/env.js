@@ -13,4 +13,5 @@ export const ENV = {
   INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
   CLIENT_URL: process.env.CLIENT_URL,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  NARI_API_KEY: process.env.NARI_API_KEY,
 };

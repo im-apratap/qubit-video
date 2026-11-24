@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
-import {ENV} from "./env.js";
+import { ENV } from "./env.js";
 
-export const connectDB = async()=>{
-    try{
-        const conn = await mongoose.connect(ENV.MONGO_URI);
-        console.log("MongoDB connected successfully",conn.connection.host);
-    }
-    catch(error){
-        console.error("MongoDB connection failed", error);
-        process.exit(1); // Status code 1 indicates an error, 0 indicates success
-    }
-} 
+export const connectDB = async () => {
+  if (!ENV.MONGO_URI) {
+    console.warn("MongoDB URI not provided. Running with in-memory session storage fallback.");
+    return;
+  }
+  try {
+    const conn = await mongoose.connect(ENV.MONGO_URI);
+    console.log("MongoDB connected successfully:", conn.connection.host);
+  } catch (error) {
+    console.warn("MongoDB connection failed:", error.message);
+    console.warn("Continuing with in-memory session storage fallback.");
+  }
+};

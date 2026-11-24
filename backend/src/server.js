@@ -7,6 +7,10 @@ import { functions, inngest } from "./config/inngest.js";
 import { serve } from "inngest/express";
 import chatRoutes from "./routes/chat.route.js";
 import translationRoutes from "./routes/translation.js";
+import speechRoutes from "./routes/speech.route.js";
+import notesRoutes from "./routes/notes.route.js";
+import sessionRoutes from "./routes/session.route.js";
+import vocabularyRoutes from "./routes/vocabulary.route.js";
 
 import cors from "cors";
 
@@ -29,6 +33,10 @@ app.get("/", (req, res) => {
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/chat", chatRoutes);
 app.use("/api/translate", translationRoutes);
+app.use("/api/speech", speechRoutes);
+app.use("/api/notes", notesRoutes);
+app.use("/api/sessions", sessionRoutes);
+app.use("/api/vocabulary", vocabularyRoutes);
 
 Sentry.setupExpressErrorHandler(app);
 

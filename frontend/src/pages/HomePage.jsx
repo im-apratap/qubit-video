@@ -15,14 +15,16 @@ import {
 } from "stream-chat-react";
 
 import "../styles/stream-chat-theme.css";
-import { HashIcon, PlusIcon, UsersIcon } from "lucide-react";
+import { HashIcon, PlusIcon, UsersIcon, History } from "lucide-react";
 import CreateChannelModal from "../components/CreateChannelModal";
 import CustomChannelPreview from "../components/CustomChannelPreview";
 import UsersList from "../components/UsersList";
 import CustomChannelHeader from "../components/CustomChannelHeader";
+import MeetingRecordsModal from "../components/MeetingRecordsModal";
 
 const HomePage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isRecordsModalOpen, setIsRecordsModalOpen] = useState(false);
   const [activeChannel, setActiveChannel] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -71,13 +73,22 @@ const HomePage = () => {
               </div>
               {/* CHANNELS LIST */}
               <div className="team-channel-list__content">
-                <div className="create-channel-section">
+                <div className="create-channel-section flex flex-col gap-2">
                   <button
                     onClick={() => setIsCreateModalOpen(true)}
                     className="create-channel-btn"
                   >
                     <PlusIcon className="size-4" />
                     <span>Create Channel</span>
+                  </button>
+
+                  <button
+                    onClick={() => setIsRecordsModalOpen(true)}
+                    className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+                    title="View past meeting notes and bilingual transcripts"
+                  >
+                    <History className="size-3.5 text-[#E8552B]" />
+                    <span>Meeting Records (知了)</span>
                   </button>
                 </div>
 
@@ -147,6 +158,13 @@ const HomePage = () => {
 
         {isCreateModalOpen && (
           <CreateChannelModal onClose={() => setIsCreateModalOpen(false)} />
+        )}
+
+        {isRecordsModalOpen && (
+          <MeetingRecordsModal
+            isOpen={isRecordsModalOpen}
+            onClose={() => setIsRecordsModalOpen(false)}
+          />
         )}
       </Chat>
     </div>
